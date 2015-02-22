@@ -34,6 +34,8 @@ public class ProfileUserActivity extends Activity {
     private Firebase firebaseRef;
     private String username;
 
+    static int ACTIVITIES_TO_PROFILE = 10;
+
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
     @Override
@@ -119,18 +121,23 @@ public class ProfileUserActivity extends Activity {
             public void onDataChange(DataSnapshot snapshot) {
                 Log.d("Snapshot", ""+snapshot.getValue());
 
+                int count = 0;
                 for(Object activityKey : ((Map<Object, Object>) snapshot.getValue()).keySet()) {
-                    Object activity =  ((Map<Object, Object>) snapshot.getValue()).get(activityKey);
+                    if (count < ACTIVITIES_TO_PROFILE) {
+                        Object activity = ((Map<Object, Object>) snapshot.getValue()).get(activityKey);
 
-                   //Log.d("ProfileUserActivity", "activity name: "+activityKey);
-                    activityNameList.add(""+activityKey);
-                    stringAdapterList.add(""+((Map<Object, Object>)activity).get("name"));
-                    nameList.add(""+((Map<Object, Object>)activity).get("name"));
-                    scaryList.add(Integer.parseInt(""+((Map<Object, Object>)activity).get("scariness")));
-                    nContributorsList.add(Integer.parseInt(""+((Map<Object, Object>)activity).get("nContributors")));
+                        //Log.d("ProfileUserActivity", "activity name: "+activityKey);
+                        activityNameList.add("" + activityKey);
+                        stringAdapterList.add("" + ((Map<Object, Object>) activity).get("name"));
+                        nameList.add("" + ((Map<Object, Object>) activity).get("name"));
+                        scaryList.add(Integer.parseInt("" + ((Map<Object, Object>) activity).get("scariness")));
+                        nContributorsList.add(Integer.parseInt("" + ((Map<Object, Object>) activity).get("nContributors")));
 
-                    //Log.d("ProfileUserActivity", "Activity title: "+((Map<Object, Object>)activity).get("name"));
-                    //Log.d("ProfileUserActivity", "Activity scariness: "+((Map<Object, Object>)activity).get("scariness"));
+                        count += 1;
+
+                        //Log.d("ProfileUserActivity", "Activity title: "+((Map<Object, Object>)activity).get("name"));
+                        //Log.d("ProfileUserActivity", "Activity scariness: "+((Map<Object, Object>)activity).get("scariness"));
+                    }
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
