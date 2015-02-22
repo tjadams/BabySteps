@@ -180,7 +180,7 @@ public class ProfileUserActivity extends Activity {
             }
 
             if( numSelected ==0 ){
-                threshold = 0;
+                threshold = 10;
             } else {
                 threshold = threshold / numSelected;
             }
