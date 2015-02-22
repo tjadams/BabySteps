@@ -3,6 +3,8 @@ package com.lorentzos.swipecards;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -98,8 +100,18 @@ public class ProfileUserActivity extends Activity {
             @Override
             public void onScroll(float scrollProgressPercent) {
                 View view = flingContainer.getSelectedView();
-                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+                View text = view.findViewById(R.id.helloText);
+                if(scrollProgressPercent > 0) {
+                    text.setBackgroundColor(Color.HSVToColor(
+                            new float [] { 60f + scrollProgressPercent * 30, // H
+                                           scrollProgressPercent * 0.8f,     // S
+                                           1f}));                            // V
+                } else {
+                    text.setBackgroundColor(Color.HSVToColor(
+                            new float [] { 60f + scrollProgressPercent * 60, // H
+                                           -scrollProgressPercent * 0.8f,    // S
+                                           1f}));                            // V
+                }
             }
         });
 
