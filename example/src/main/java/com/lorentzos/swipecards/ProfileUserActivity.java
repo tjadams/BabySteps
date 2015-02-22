@@ -2,6 +2,7 @@ package com.lorentzos.swipecards;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.firebase.client.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -28,24 +30,20 @@ public class ProfileUserActivity extends Activity {
     private ArrayList<String> stringAdapterList;
     private ArrayList<String> nameList;
     private ArrayAdapter<String> arrayAdapter;
-    private int i;
+    private Firebase firebaseRef;
+    private String username;
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        username = getIntent().getExtras().getString("username");
         setContentView(R.layout.activity_my);
         ButterKnife.inject(this);
 
-        // TODO in the login activity:
-        // see if there exists a user profile with this user
-        // if there isn't, make a new user profile and push that to firebase
-        // if there is, pull that user profile
-
         // The indexes in these 3 lists represent the same object. I.e., index 0 in each of these lists is the same dataObject.
         scaryList = new ArrayList<Integer>();
-
         // stringAdapterList is the same as nameList but stringAdapterList gets deleted and nameList remains
         stringAdapterList = new ArrayList<String>();
         nameList = new ArrayList<String>();
@@ -73,7 +71,7 @@ public class ProfileUserActivity extends Activity {
                 makeToast(ProfileUserActivity.this, "Left!");
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
-                checkIfDone();
+                ifDoneThenFinish();
             }
 
             @Override
@@ -82,7 +80,7 @@ public class ProfileUserActivity extends Activity {
                 swipeResults.add(1);
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
-                checkIfDone();
+                ifDoneThenFinish();
             }
 
             @Override
@@ -111,7 +109,7 @@ public class ProfileUserActivity extends Activity {
         });
 
         Firebase.setAndroidContext(this);
-        Firebase firebaseRef = new Firebase("https://babystep.firebaseio.com/");
+        firebaseRef = new Firebase("https://babystep.firebaseio.com/");
 
         // pull activities from firebase and add them to an arraylist
         Firebase scoresRef = firebaseRef.child("activities");
@@ -140,14 +138,32 @@ public class ProfileUserActivity extends Activity {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-    public void checkIfDone(){
+    public void ifDoneThenFinish(){
         if (stringAdapterList.size() == 0){
-            /*Log.d("Activity", "\nPrinting results:");
+            int threshold = 0;
+            int numSelected = 0;
+            //Log.d("Activity", "\nPrinting results:");
             for(int i=0; i < nameList.size(); i++){
-                Log.d("Activity", ""+swipeResults.get(i));
-            }*/
-            // TODO Push personal threshold back to firebase when done
-            // TODO go to new activity
+                if(swipeResults.get(i) == 1) {
+                    threshold = threshold + scaryList.get(i);
+                    numSelected++;
+                }
+                //Log.d("Activity", ""+swipeResults.get(i));
+            }
+
+            // for some reason we decided to have the threshold be in 10s.
+            threshold = threshold/numSelected;
+            // no need to check if firebaseref is null since it has been created by now
+            // Push personal threshold back to firebase when done with user data
+            Map<String, Object> newThreshold = new HashMap<String, Object>();
+            newThreshold.put("threshold", threshold);
+            firebaseRef.child("users").child(username).updateChildren(newThreshold);
+
+            // TODO get import for DashboardActivity and then go to new activity
+            // Intent intent = new Intent(this, DashboardActivity.class);
+            // startActivity(intent);
+
+            // TODO test this method
         }
     }
 }
