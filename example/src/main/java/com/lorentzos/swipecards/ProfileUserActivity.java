@@ -24,7 +24,9 @@ import butterknife.OnClick;
 public class ProfileUserActivity extends Activity {
 
     private ArrayList<Integer> scaryList;
-    private ArrayList<String> stringList;
+    private ArrayList<Integer> swipeResults;
+    private ArrayList<String> stringAdapterList;
+    private ArrayList<String> nameList;
     private ArrayAdapter<String> arrayAdapter;
     private int i;
 
@@ -40,25 +42,26 @@ public class ProfileUserActivity extends Activity {
         // see if there exists a user profile with this user
         // if there isn't, make a new user profile and push that to firebase
         // if there is, pull that user profile
+
+        // The indexes in these 3 lists represent the same object. I.e., index 0 in each of these lists is the same dataObject.
         scaryList = new ArrayList<Integer>();
-        stringList = new ArrayList<String>();
+
+        // stringAdapterList is the same as nameList but stringAdapterList gets deleted and nameList remains
+        stringAdapterList = new ArrayList<String>();
+        nameList = new ArrayList<String>();
+        swipeResults = new ArrayList<Integer>();
 
         // from the user's responses on the particular activities, compute personal threshold
-        arrayAdapter = new ArrayAdapter<>(ProfileUserActivity.this, R.layout.item, R.id.helloText, stringList);
+        arrayAdapter = new ArrayAdapter<>(ProfileUserActivity.this, R.layout.item, R.id.helloText, stringAdapterList);
         flingContainer.setAdapter(arrayAdapter);
-
 
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                stringList.remove(0);
+                stringAdapterList.remove(0);
                 arrayAdapter.notifyDataSetChanged();
-                if (stringList.size() == 0){
-                    // TODO Push personal threshold back to firebase when done
-                    // TODO go to new activity
-                }
             }
 
             @Override
@@ -66,18 +69,26 @@ public class ProfileUserActivity extends Activity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+                swipeResults.add(0);
                 makeToast(ProfileUserActivity.this, "Left!");
+
+                // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
+                checkIfDone();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 makeToast(ProfileUserActivity.this, "Right!");
+                swipeResults.add(1);
+
+                // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
+                checkIfDone();
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here if you want more when the thing is empty
-                //stringList.add("XML ".concat(String.valueOf(i)));
+                //stringAdapterList.add("XML ".concat(String.valueOf(i)));
                 //arrayAdapter.notifyDataSetChanged();
                 //Log.d("LIST", "notified");
                 //i++;
@@ -95,7 +106,7 @@ public class ProfileUserActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(ProfileUserActivity.this, "Clicked!");
+                makeToast(ProfileUserActivity.this, "Clicked: "+nameList.get(itemPosition));
             }
         });
 
@@ -109,7 +120,8 @@ public class ProfileUserActivity extends Activity {
             public void onDataChange(DataSnapshot snapshot) {
                 //Log.d("Snapshot", ""+snapshot.getValue());
                 for(Object activity : ((Map<Object, Object>) snapshot.getValue()).values()) {
-                    stringList.add(""+((Map<Object, Object>)activity).get("name"));
+                    stringAdapterList.add(""+((Map<Object, Object>)activity).get("name"));
+                    nameList.add(""+((Map<Object, Object>)activity).get("name"));
                     scaryList.add(Integer.parseInt(""+((Map<Object, Object>)activity).get("scariness")));
                     //Log.d("Activity", "Activity name: "+((Map<Object, Object>)activity).get("name"));
                     //Log.d("Activity", "Activity scariness: "+((Map<Object, Object>)activity).get("scariness"));
@@ -128,17 +140,14 @@ public class ProfileUserActivity extends Activity {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.right)
-    public void right() {
-        /**
-         * Trigger the right event manually.
-         */
-        flingContainer.getTopCardListener().selectRight();
+    public void checkIfDone(){
+        if (stringAdapterList.size() == 0){
+            /*Log.d("Activity", "\nPrinting results:");
+            for(int i=0; i < nameList.size(); i++){
+                Log.d("Activity", ""+swipeResults.get(i));
+            }*/
+            // TODO Push personal threshold back to firebase when done
+            // TODO go to new activity
+        }
     }
-
-    @OnClick(R.id.left)
-    public void left() {
-        flingContainer.getTopCardListener().selectLeft();
-    }
-
 }
