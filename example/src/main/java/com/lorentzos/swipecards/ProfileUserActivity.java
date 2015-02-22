@@ -136,7 +136,7 @@ public class ProfileUserActivity extends Activity {
 
                 List<Object> activities = new ArrayList(((Map<Object, Object>) snapshot.getValue()).keySet());
                 Collections.shuffle(activities);
-                for(Object activityKey : activities) {
+                for (Object activityKey : activities) {
                     if (count < ACTIVITIES_TO_PROFILE) {
                         Object activity = ((Map<Object, Object>) snapshot.getValue()).get(activityKey);
 
@@ -179,8 +179,11 @@ public class ProfileUserActivity extends Activity {
                 }
             }
 
-            threshold = threshold/numSelected;
-
+            if( numSelected ==0 ){
+                threshold = 0;
+            } else {
+                threshold = threshold / numSelected;
+            }
             // no need to check if firebaseref is null since it has been created by now
 
             // Push personal threshold back to firebase when done with user data
