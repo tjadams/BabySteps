@@ -1,4 +1,4 @@
-package com.lorentzos.swipecards;
+             package com.lorentzos.swipecards;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+               import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -19,7 +19,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+				import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,9 +36,8 @@ public class DashboardListFragment extends Fragment {
     ArrayAdapter<String> activityAdapter;
     SimpleAdapter simpleAdapter;
 
-    public static DashboardListFragment newInstance(int pageNumber, String username) {
-
-        DashboardListFragment f = new DashboardListFragment();
+ //       public static DashboardListFragment newInstance(int pageNumber, String username) {
+                       DashboardListFragment f = new DashboardListFragment();
         f.pageNumber = pageNumber;
         f.username = username;
         f.activities = new ArrayList<>();
@@ -47,8 +46,7 @@ public class DashboardListFragment extends Fragment {
         return f;
 
     }
-
-    @Override
+	    @Override
     public void onCreate(Bundle savedInstanceState) {
         activityAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.dashboard_item, R.id.dashboard_item_text_view, activities);
@@ -66,39 +64,38 @@ public class DashboardListFragment extends Fragment {
                         String textViewValue;
                         @Override
                         public void onClick(View v) {
-                            for(int i=0; i<((ViewGroup)v.getParent()).getChildCount(); ++i) {
+            for(int i=0; i<((ViewGroup)v.getParent()).getChildCount(); ++i) {
                                 View nextChild = ((ViewGroup) v.getParent()).getChildAt(i);
                                 if (nextChild.getId() == R.id.textView) {
                                     textViewValue = ((TextView) nextChild).getText().toString();
                                 }
-                            }
                             Long newThreshold = scarinessMap.get(textViewValue);
                             Log.d("newThreshold", ""+newThreshold);
                             Firebase userRef = new Firebase("https://babystep.firebaseio.com/users/");
-                            Map<String, Object> newThresholdMap = new HashMap<String, Object>();
+   Map<String, Object> newThresholdMap = new HashMap<String, Object>();
                             newThresholdMap.put("threshold", newThreshold);
-                            userRef.child(username).updateChildren(newThresholdMap);
+    //                              userRef.child(username).updateChildren(newThresholdMap);
                         }
                     });
-                    return true;
+           return true;
                 }
                 return false;
             }
         });
 
-        // Get a reference to our posts
+     //        // Get a reference to our posts
         Firebase ref = new Firebase("https://babystep.firebaseio.com");
         // Attach an listener to read the data at our posts reference
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                activities.clear();
+		activities.clear();
                 learningActivities.clear();
                 Long threshold = (Long) ((Map<String, Map<String, Map<String, Object>>>) dataSnapshot.getValue()).
                         get("users").get(username).get("threshold");
-                for (String activityID : ((Map<String, Map<String, Object>>) dataSnapshot.getValue()).get("activities").keySet()) {
-                    Map<String, Object> activity = ((Map<String, Map<String, Map<String, Object>>>) dataSnapshot.getValue()).
+     for (String activityID : ((Map<String, Map<String, Object>>) dataSnapshot.getValue()).get("activities").keySet()) {
+		Map<String, Object> activity = ((Map<String, Map<String, Map<String, Object>>>) dataSnapshot.getValue()).
                             get("activities").get(activityID);
                     Long activityScore = (Long) activity.get("scariness");
                     scarinessMap.put((String) activity.get("name"), activityScore);
@@ -113,13 +110,13 @@ public class DashboardListFragment extends Fragment {
                             newActivity.put("name", activityName);
                             newActivity.put("dumb", "");
                             learningActivities.add(newActivity);
-                        }
+	}
                     } else {
                         if ((threshold + 10) <= activityScore) {
-                            activities.add(activityName);
+                 activities.add(activityName);
                         }
                     }
-                }
+     }
                 simpleAdapter.notifyDataSetChanged();
                 activityAdapter.notifyDataSetChanged();
             }
@@ -127,9 +124,9 @@ public class DashboardListFragment extends Fragment {
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
-            }
+     //              }
         });
-
+ // 
 
         super.onCreate(savedInstanceState);
     }
@@ -149,9 +146,10 @@ public class DashboardListFragment extends Fragment {
 
         if (pageNumber == 1) {
             ((ListView) root.findViewById(R.id.listView)).setAdapter(simpleAdapter);
-        } else {
+    //           } else {
             ((ListView) root.findViewById(R.id.listView)).setAdapter(activityAdapter);
         }
+        return root;
         return root;
     }
 }

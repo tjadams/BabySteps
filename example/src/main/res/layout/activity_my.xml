@@ -7,11 +7,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
+<TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/instructionText"
-            android:background="#ffeee9e2"
+              android:background="#ffeee9e2"
             android:text="Swipe right on things you're comfortable with, swipe left on things you're not"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
@@ -20,7 +20,7 @@
             android:background="#ffeee9e2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:rotation_degrees="15.5"
+			app:rotation_degrees="15.5"
             tools:context=".MyActivity" />
 
     </LinearLayout>

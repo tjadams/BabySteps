@@ -1,7 +1,6 @@
 package com.lorentzos.swipecards;
-
-import android.app.Activity;
-import android.content.Context;
+   import android.app.Activity;
+        import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,21 +16,20 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
-import java.util.ArrayList;
+           import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-
-public class ProfileUserActivity extends Activity {
+               import butterknife.InjectView;
+					public class ProfileUserActivity extends Activity {
 
     private ArrayList<Integer> scaryList;
     private ArrayList<Integer> swipeResults;
     private ArrayList<String> stringAdapterList;
     private ArrayList<String> nameList;
     private ArrayList<Integer> nContributorsList;
-    private ArrayList<String> activityNameList;
+               private ArrayList<String> activityNameList;
     private ArrayAdapter<String> arrayAdapter;
     private Firebase firebaseRef;
     private String username;
@@ -54,14 +52,14 @@ public class ProfileUserActivity extends Activity {
         nameList = new ArrayList<String>();
         swipeResults = new ArrayList<Integer>();
         nContributorsList = new ArrayList<Integer>();
-        activityNameList = new ArrayList<String>();
+           activityNameList = new ArrayList<String>();
 
         // from the user's responses on the particular activities, compute personal threshold
         arrayAdapter = new ArrayAdapter<>(ProfileUserActivity.this, R.layout.item, R.id.helloText, stringAdapterList);
         flingContainer.setAdapter(arrayAdapter);
 
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
+     //              @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
@@ -71,10 +69,10 @@ public class ProfileUserActivity extends Activity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
+  //Do something on the left!
+				//You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                swipeResults.add(0);
+				swipeResults.add(0);
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
                 ifDoneThenFinish();
@@ -86,7 +84,7 @@ public class ProfileUserActivity extends Activity {
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
                 ifDoneThenFinish();
-            }
+				}
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
@@ -104,7 +102,7 @@ public class ProfileUserActivity extends Activity {
                 if(scrollProgressPercent > 0) {
                     text.setBackgroundColor(Color.HSVToColor(
                             new float [] { 60f + scrollProgressPercent * 30, // H
-                                           scrollProgressPercent * 0.8f,     // S
+//                                              scrollProgressPercent * 0.8f,     // S
                                            1f}));                            // V
                 } else {
                     text.setBackgroundColor(Color.HSVToColor(
@@ -116,10 +114,10 @@ public class ProfileUserActivity extends Activity {
         });
 
         // Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+		flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(ProfileUserActivity.this, "Clicked: "+nameList.get(itemPosition));
+            makeToast(ProfileUserActivity.this, "Clicked: "+nameList.get(itemPosition));
             }
         });
 
@@ -138,13 +136,14 @@ public class ProfileUserActivity extends Activity {
                     if (count < ACTIVITIES_TO_PROFILE) {
                         Object activity = ((Map<Object, Object>) snapshot.getValue()).get(activityKey);
 
-                        //Log.d("ProfileUserActivity", "activity name: "+activityKey);
-                        activityNameList.add("" + activityKey);
+  //Log.d("ProfileUserActivity", "activity name: "+activityKey);
+        activityNameList.add("" + activityKey);
                         stringAdapterList.add("" + ((Map<Object, Object>) activity).get("name"));
                         nameList.add("" + ((Map<Object, Object>) activity).get("name"));
                         scaryList.add(Integer.parseInt("" + ((Map<Object, Object>) activity).get("scariness")));
                         nContributorsList.add(Integer.parseInt("" + ((Map<Object, Object>) activity).get("nContributors")));
 
+                        count += 1;
                         count += 1;
 
                         //Log.d("ProfileUserActivity", "Activity title: "+((Map<Object, Object>)activity).get("name"));
@@ -165,13 +164,12 @@ public class ProfileUserActivity extends Activity {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-    public void ifDoneThenFinish(){
+	public void ifDoneThenFinish(){
         if (stringAdapterList.size() == 0){
             int threshold = 0;
             int numSelected = 0;
-            //Log.d("ProfileUserActivity", "\nPrinting results:");
-            for(int i=0; i < nameList.size(); i++){
-                if(swipeResults.get(i) == 1) {
+                 for(int i=0; i < nameList.size(); i++){
+ //                  if(swipeResults.get(i) == 1) {
                     threshold = threshold + scaryList.get(i);
                     numSelected++;
                 }
@@ -186,7 +184,7 @@ public class ProfileUserActivity extends Activity {
             newThreshold.put("threshold", threshold);
 
             for(int i=0; i <nameList.size(); i++){
-                // scariness should go down or up if you say it should
+ //                   // scariness should go down or up if you say it should
                 if((swipeResults.get(i) == 1 && threshold < scaryList.get(i)) ||
                         (swipeResults.get(i) == 0 && threshold > scaryList.get(i))){
                     // Scariness only goes down because you calculated the new threshold and your new threshold is relatively low
@@ -198,7 +196,6 @@ public class ProfileUserActivity extends Activity {
                     // This next line is just updating the scariness. Could have also done scaryList.set(i, nC*....)
                     int newScariness = (nC*scaryList.get(i) + threshold) / (nC + 1);
                     // This next line increases the nContributors for that activity by one in firebase
-                    HashMap<String, Object> newEntry = new HashMap<String, Object>();
                     newEntry.put("scariness", newScariness);
                     newEntry.put("nContributors", nC + 1);
 
@@ -206,7 +203,7 @@ public class ProfileUserActivity extends Activity {
                     // child has to be something else like activity1 or activity2 etc as in firebase
                     firebaseRef.child("activities").child(activityNameList.get(i)).updateChildren(newEntry);
                 }
-            }
+     //             }
 
             Log.d("ProfileUserActivity", "User: "+username+" has threshold: "+threshold);
             firebaseRef.child("users").child(username).updateChildren(newThreshold);
@@ -214,9 +211,9 @@ public class ProfileUserActivity extends Activity {
             // TODO get import for DashboardActivity and then go to new activity
             Intent intent = new Intent(this, DashboardActivity.class);
             intent.putExtra("username", username);
-            startActivity(intent);
+             startActivity(intent);
 
             // TODO test this method
         }
     }
-}
+               }
