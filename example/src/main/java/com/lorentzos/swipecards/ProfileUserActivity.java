@@ -129,11 +129,9 @@ public class ProfileUserActivity extends Activity {
 
         // pull activities from firebase and add them to an arraylist
         Firebase scoresRef = firebaseRef.child("activities");
-        scoresRef.addValueEventListener(new ValueEventListener() {
+        scoresRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.d("Snapshot", ""+snapshot.getValue());
-
                 int count = 0;
 
                 List<Object> activities = new ArrayList(((Map<Object, Object>) snapshot.getValue()).keySet());
