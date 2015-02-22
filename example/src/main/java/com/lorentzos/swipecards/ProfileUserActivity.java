@@ -121,8 +121,8 @@ public class ProfileUserActivity extends Activity {
                     stringAdapterList.add(""+((Map<Object, Object>)activity).get("name"));
                     nameList.add(""+((Map<Object, Object>)activity).get("name"));
                     scaryList.add(Integer.parseInt(""+((Map<Object, Object>)activity).get("scariness")));
-                    //Log.d("Activity", "Activity name: "+((Map<Object, Object>)activity).get("name"));
-                    //Log.d("Activity", "Activity scariness: "+((Map<Object, Object>)activity).get("scariness"));
+                    //Log.d("ProfileUserActivity", "Activity name: "+((Map<Object, Object>)activity).get("name"));
+                    //Log.d("ProfileUserActivity", "Activity scariness: "+((Map<Object, Object>)activity).get("scariness"));
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -142,13 +142,13 @@ public class ProfileUserActivity extends Activity {
         if (stringAdapterList.size() == 0){
             int threshold = 0;
             int numSelected = 0;
-            //Log.d("Activity", "\nPrinting results:");
+            //Log.d("ProfileUserActivity", "\nPrinting results:");
             for(int i=0; i < nameList.size(); i++){
                 if(swipeResults.get(i) == 1) {
                     threshold = threshold + scaryList.get(i);
                     numSelected++;
                 }
-                //Log.d("Activity", ""+swipeResults.get(i));
+                //Log.d("ProfileUserActivity", ""+swipeResults.get(i));
             }
 
             // for some reason we decided to have the threshold be in 10s.
@@ -157,6 +157,7 @@ public class ProfileUserActivity extends Activity {
             // Push personal threshold back to firebase when done with user data
             Map<String, Object> newThreshold = new HashMap<String, Object>();
             newThreshold.put("threshold", threshold);
+            Log.d("ProfileUserActivity", "User: "+username+" has threshold: "+threshold);
             firebaseRef.child("users").child(username).updateChildren(newThreshold);
 
             // TODO get import for DashboardActivity and then go to new activity
