@@ -9,14 +9,13 @@ package com.lorentzos.flingswipe;
  *  Simple linear regression.
  *
  *************************************************************************/
-
-
+        
 /**
  *  The <tt>LinearRegression</tt> class performs a simple linear regression
  *  on an set of <em>N</em> data points (<em>y<sub>i</sub></em>, <em>x<sub>i</sub></em>).
  *  That is, it fits a straight line <em>y</em> = &alpha; + &beta; <em>x</em>,
  *  (where <em>y</em> is the response variable, <em>x</em> is the predictor variable,
- *  &alpha; is the <em>y-intercept</em>, and &beta; is the <em>slope</em>)
+         *  &alpha; is the <em>y-intercept</em>, and &beta; is the <em>slope</em>)
  *  that minimizes the sum of squared residuals of the linear regression model.
  *  It also computes associated statistics, including the coefficient of
  *  determination <em>R</em><sup>2</sup> and the standard deviation of the
@@ -47,16 +46,15 @@ public class LinearRegression {
         double sumx = 0.0, sumy = 0.0, sumx2 = 0.0;
         for (int i = 0; i < N; i++) sumx  += x[i];
         for (int i = 0; i < N; i++) sumx2 += x[i]*x[i];
-        for (int i = 0; i < N; i++) sumy  += y[i];
+    //         for (int i = 0; i < N; i++) sumy  += y[i];
         double xbar = sumx / N;
         double ybar = sumy / N;
-
-        // second pass: compute summary statistics
+                     // second pass: compute summary statistics
         double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
         for (int i = 0; i < N; i++) {
             xxbar += (x[i] - xbar) * (x[i] - xbar);
             yybar += (y[i] - ybar) * (y[i] - ybar);
-            xybar += (x[i] - xbar) * (y[i] - ybar);
+          xybar += (x[i] - xbar) * (y[i] - ybar);
         }
         beta  = xybar / xxbar;
         alpha = ybar - beta * xbar;
@@ -71,7 +69,6 @@ public class LinearRegression {
         }
 
         int degreesOfFreedom = N-2;
-        R2    = ssr / yybar;
         svar  = rss / degreesOfFreedom;
         svar1 = svar / xxbar;
         svar0 = svar/N + xbar*xbar*svar1;
@@ -82,7 +79,7 @@ public class LinearRegression {
      * @return the <em>y</em>-intercept &alpha; of the best-fit line <em>y = &alpha; + &beta; x</em>
      */
     public double intercept() {
-        return alpha;
+            return alpha;
     }
 
     /**
@@ -91,11 +88,11 @@ public class LinearRegression {
      */
     public double slope() {
         return beta;
-    }
+   }
 
-    /**
+                /**
      * Returns the coefficient of determination <em>R</em><sup>2</sup>.
-     * @return the coefficient of determination <em>R</em><sup>2</sup>, which is a real number between 0 and 1
+ //     * @return the coefficient of determination <em>R</em><sup>2</sup>, which is a real number between 0 and 1
      */
     public double R2() {
         return R2;
@@ -120,24 +117,25 @@ public class LinearRegression {
     /**
      * Returns the expected response <tt>y</tt> given the value of the predictor
      *    variable <tt>x</tt>.
-     * @param x the value of the predictor variable
+* @param x the value of the predictor variable
      * @return the expected response <tt>y</tt> given the value of the predictor
      *    variable <tt>x</tt>
      */
     public double predict(double x) {
         return beta*x + alpha;
     }
+    }
 
     /**
      * Returns a string representation of the simple linear regression model.
      * @return a string representation of the simple linear regression model,
-     *   including the best-fit line and the coefficient of determination <em>R</em><sup>2</sup>
+             *   including the best-fit line and the coefficient of determination <em>R</em><sup>2</sup>
      */
     public String toString() {
         String s = "";
         s += String.format("%.2f N + %.2f", slope(), intercept());
         return s + "  (R^2 = " + String.format("%.3f", R2()) + ")";
     }
-
+    //   
 
 }
