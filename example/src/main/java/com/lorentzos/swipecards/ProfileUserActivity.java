@@ -161,8 +161,9 @@ public class ProfileUserActivity extends Activity {
             firebaseRef.child("users").child(username).updateChildren(newThreshold);
 
             // TODO get import for DashboardActivity and then go to new activity
-            // Intent intent = new Intent(this, DashboardActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.putExtra("username", username);
+            startActivity(intent);
 
             // TODO test this method
         }

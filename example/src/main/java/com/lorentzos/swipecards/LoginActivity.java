@@ -52,9 +52,9 @@ public class LoginActivity extends Activity {
                 } else {
                     Log.d("LoginActivity", "Not first time, go to Dashboard");
                     // Not first time, go right to the action
-                    //TODO Intent i = new Intent(this, DashboardActivity.class);
-//                    i.putExtra("username", usernameString);
-//                    startActivity(i);
+                    Intent i = new Intent(this, DashboardActivity.class);
+                    i.putExtra("username", usernameString);
+                    startActivity(i);
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "Invalid password",

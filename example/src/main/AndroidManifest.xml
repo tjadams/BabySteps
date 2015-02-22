@@ -21,6 +21,9 @@
         <activity
             android:name=".ProfileUserActivity" >
         </activity>
+        <activity
+            android:name=".DashboardActivity" >
+        </activity>
     </application>
 
 </manifest>
