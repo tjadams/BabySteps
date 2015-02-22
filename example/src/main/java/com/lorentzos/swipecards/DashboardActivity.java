@@ -1,6 +1,7 @@
 package com.lorentzos.swipecards;
 
 import android.app.ActionBar;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -17,10 +18,12 @@ public class DashboardActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         username = getIntent().getExtras().getString("username");
         setContentView(R.layout.activity_dashboard);
-        ColorViewPager vpPager = (ColorViewPager) findViewById(R.id.pager);
-        vpPager.setActionBar(getActionBar());
-        vpPager.setWindow(getWindow());
-        getActionBar().setElevation(0);
+        ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
+        if (vpPager instanceof ColorViewPager) {
+            ((ColorViewPager) vpPager).setActionBar(getActionBar());
+            ((ColorViewPager) vpPager).setWindow(getWindow());
+            getActionBar().setElevation(0);
+        }
         adapterViewPager = new DashboardTabAdapter(getSupportFragmentManager());
         adapterViewPager.setUsername(username);
         vpPager.setAdapter(adapterViewPager);
