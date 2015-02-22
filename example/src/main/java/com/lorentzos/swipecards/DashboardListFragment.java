@@ -41,15 +41,20 @@ public class DashboardListFragment extends Fragment {
         DashboardListFragment f = new DashboardListFragment();
         f.pageNumber = pageNumber;
         f.username = username;
-        f.activities = new ArrayList<>();
-        f.learningActivities = new ArrayList<HashMap<String, String>>();
-        f.scarinessMap = new HashMap<>();
         return f;
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Reload username if needed
+        if(savedInstanceState != null) {
+            username = savedInstanceState.getString("username");
+        }
+
+        activities = new ArrayList<>();
+        learningActivities = new ArrayList<HashMap<String, String>>();
+        scarinessMap = new HashMap<>();
         activityAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.dashboard_item, R.id.dashboard_item_text_view, activities);
 
@@ -132,6 +137,12 @@ public class DashboardListFragment extends Fragment {
 
 
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("username", username);
     }
 
     @Override
