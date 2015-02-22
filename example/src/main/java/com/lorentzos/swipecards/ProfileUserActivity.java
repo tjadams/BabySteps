@@ -21,7 +21,6 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class ProfileUserActivity extends Activity {
 
@@ -68,7 +67,6 @@ public class ProfileUserActivity extends Activity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 swipeResults.add(0);
-                makeToast(ProfileUserActivity.this, "Left!");
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
                 ifDoneThenFinish();
@@ -76,7 +74,6 @@ public class ProfileUserActivity extends Activity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(ProfileUserActivity.this, "Right!");
                 swipeResults.add(1);
 
                 // the reason why we check if done here is because the card exit is the last thing that happens in a swipe
@@ -148,12 +145,12 @@ public class ProfileUserActivity extends Activity {
                     threshold = threshold + scaryList.get(i);
                     numSelected++;
                 }
-                //Log.d("ProfileUserActivity", ""+swipeResults.get(i));
             }
 
-            // for some reason we decided to have the threshold be in 10s.
             threshold = threshold/numSelected;
+
             // no need to check if firebaseref is null since it has been created by now
+
             // Push personal threshold back to firebase when done with user data
             Map<String, Object> newThreshold = new HashMap<String, Object>();
             newThreshold.put("threshold", threshold);

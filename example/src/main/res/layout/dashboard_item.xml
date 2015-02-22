@@ -5,6 +5,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/dashboard_item_text_view" />
+        android:layout_marginLeft="10dp"
+        android:text="Test"
+        android:id="@+id/dashboard_item_text_view"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </LinearLayout>

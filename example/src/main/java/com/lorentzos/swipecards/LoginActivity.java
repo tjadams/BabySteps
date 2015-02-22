@@ -62,15 +62,20 @@ public class LoginActivity extends Activity {
             }
         } else {
             // not in there, add
-            Map<String, Object> newUser = new HashMap<String, Object>();
-            newUser.put("password", passwordString);
-            newUser.put("threshold", -1);
-            firebaseRef.child("users").child(usernameString).setValue(newUser);
-            Toast.makeText(getApplicationContext(), "New account created!",
-                    Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(this, ProfileUserActivity.class);
-            i.putExtra("username", usernameString);
-            startActivity(i);
+            if (passwordString.length() < 6) {
+                Toast.makeText(getApplicationContext(), "Password too short, must be at least 6 characters!",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Map<String, Object> newUser = new HashMap<String, Object>();
+                newUser.put("password", passwordString);
+                newUser.put("threshold", -1);
+                firebaseRef.child("users").child(usernameString).setValue(newUser);
+                Toast.makeText(getApplicationContext(), "New account created!",
+                        Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, ProfileUserActivity.class);
+                i.putExtra("username", usernameString);
+                startActivity(i);
+            }
         }
     }
 
