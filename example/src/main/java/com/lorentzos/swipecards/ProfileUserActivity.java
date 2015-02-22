@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,9 @@ import com.firebase.client.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -134,7 +135,10 @@ public class ProfileUserActivity extends Activity {
                 Log.d("Snapshot", ""+snapshot.getValue());
 
                 int count = 0;
-                for(Object activityKey : ((Map<Object, Object>) snapshot.getValue()).keySet()) {
+
+                List<Object> activities = new ArrayList(((Map<Object, Object>) snapshot.getValue()).keySet());
+                Collections.shuffle(activities);
+                for(Object activityKey : activities) {
                     if (count < ACTIVITIES_TO_PROFILE) {
                         Object activity = ((Map<Object, Object>) snapshot.getValue()).get(activityKey);
 
