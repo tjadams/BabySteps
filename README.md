@@ -9,11 +9,13 @@ We suggest activities you can take part in which will increase your comfort zone
 Upon the first time you login, we rate your comfort zone threshold by performing an algorithm based on your willingness to do certain activities. You can swipe left or right to like or dislike the “activity”. Next, we take your threshold and compare that to other peoples views on the activities you made decisions on. This allows us to suggest things you could do to increase your comfort zone. When you are in the dashboard area, you can complete activities at your own pace. As your comfort zone incerases, more activities become plausible to complete.
 
 
-##For the Future
+##To do list
 
 - Use a forked version of the [Tinder](https://github.com/Diolor/Swipecards) gradle library project to handle the Tinder swiping 
 - Add a front-end web component
-
+- Clean this code
+- Comment this code
+- Refactor the directory structure to be like actual Android apps
 
 ##Credits
 
